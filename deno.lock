@@ -1,0 +1,23 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@deno/graph@*": "0.86.8",
+    "jsr:@std/fs@*": "1.0.5",
+    "jsr:@std/path@*": "1.0.8",
+    "jsr:@std/path@^1.0.7": "1.0.8"
+  },
+  "jsr": {
+    "@deno/graph@0.86.8": {
+      "integrity": "6bbfd2a8bb590b5a2843d6f37fbbd21d6a9eff53fd2952af1921cccf4905d7ac"
+    },
+    "@std/fs@1.0.5": {
+      "integrity": "41806ad6823d0b5f275f9849a2640d87e4ef67c51ee1b8fb02426f55e02fd44e",
+      "dependencies": [
+        "jsr:@std/path@^1.0.7"
+      ]
+    },
+    "@std/path@1.0.8": {
+      "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
+    }
+  }
+}
