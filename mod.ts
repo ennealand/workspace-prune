@@ -2,7 +2,7 @@
  * This script isolates workspace members for efficient docker setup similar to `turbo prune`
  */
 
-import { ensureDir } from '@std/fs'
+import { ensureDir, exists } from '@std/fs'
 import { dirname, resolve } from '@std/path'
 import { applyReplacements } from './fs.ts'
 import { getGraph } from './prune.ts'
@@ -31,6 +31,10 @@ const prepareWorkspace = async (workspace: string) => {
   const workspaces = await getWorkspaces(config)
   const { files, imports, remoteImports } = await getGraph(workspace, config, workspaces)
   const toOutput = (...file: string[]) => resolve('./.out', workspace.replace('/', '_'), ...file)
+
+  if (await exists(toOutput())) {
+    await Deno.remove(toOutput(), { recursive: true })
+  }
 
   const filesToCopy = files.values().filter(file => !imports.has(file))
   const copiedFiles = Promise.all(
