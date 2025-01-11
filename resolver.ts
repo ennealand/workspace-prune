@@ -38,7 +38,7 @@ export const getWorkspaceResolver = (denoConfig: DenoConfig, { workspaceImports,
         }
         if (!value.startsWith('file://')) {
           if (key !== specifier) remoteImports.set(key, originalValue)
-          else remoteImports.set(specifier, value)
+          remoteImports.set(specifier, value)
           return specifier
         }
         return value
