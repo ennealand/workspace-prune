@@ -1,5 +1,5 @@
-import { createGraph } from 'jsr:@deno/graph'
-import { relative } from 'jsr:@std/path'
+import { createGraph } from '@deno/graph'
+import { relative } from '@std/path'
 import { getWorkspaceResolver } from './resolver.ts'
 import type { DenoConfig, Workspaces } from './types.ts'
 

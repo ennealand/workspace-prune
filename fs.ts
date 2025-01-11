@@ -1,5 +1,5 @@
-import { dirname } from 'jsr:@std/path'
-import { ensureDir } from 'jsr:@std/fs'
+import { dirname } from '@std/path'
+import { ensureDir } from '@std/fs'
 
 type pos = { line: number; character: number; cursor?: number }
 type dep = { specifier: string; start: pos; end: pos }

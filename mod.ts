@@ -2,8 +2,8 @@
  * This script isolates workspace members for efficient docker setup similar to `turbo prune`
  */
 
-import { ensureDir } from 'jsr:@std/fs'
-import { dirname, resolve } from 'jsr:@std/path'
+import { ensureDir } from '@std/fs'
+import { dirname, resolve } from '@std/path'
 import { applyReplacements } from './fs.ts'
 import { getGraph } from './prune.ts'
 import { getWorkspaces } from './workspaces.ts'

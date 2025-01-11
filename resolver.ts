@@ -1,4 +1,4 @@
-import { resolve, toFileUrl } from 'jsr:@std/path'
+import { resolve, toFileUrl } from '@std/path'
 import type { DenoConfig, Workspaces } from './types.ts'
 
 export const getWorkspaceResolver = (denoConfig: DenoConfig, { workspaceImports, workspaces }: Workspaces) => {
