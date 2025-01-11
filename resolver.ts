@@ -4,8 +4,15 @@ import type { DenoConfig, Workspaces } from './types.ts'
 export const getWorkspaceResolver = (denoConfig: DenoConfig, { workspaceImports, workspaces }: Workspaces) => {
   const globalImporst = [...Object.entries(workspaces), ...Object.entries(denoConfig.imports)]
 
-  function importMatch(this: string, [key]: [string, string]) {
-    return this === key || (key.endsWith('/') ? this.startsWith(key) : this.startsWith(key + '/'))
+  const findMatch = (imports: [string, string][], specifier: string) => {
+    let possibleMatch = undefined
+    for (const item of imports) {
+      if (specifier === item[0]) return item
+      if (item[0].endsWith('/')) {
+        if (specifier.startsWith(item[0])) return item
+      } else if (specifier.startsWith(item[0] + '/')) possibleMatch = item
+    }
+    return possibleMatch
   }
 
   const remoteImports = new Map()
@@ -18,26 +25,33 @@ export const getWorkspaceResolver = (denoConfig: DenoConfig, { workspaceImports,
     const workspace = denoConfig.workspace.find(workspace => referrer.startsWith(toFileUrl(resolve(workspace)).href + '/'))
 
     if (workspace && workspaceImports[workspace]) {
-      const match = workspaceImports[workspace].find(importMatch, specifier)
+      const match = findMatch(workspaceImports[workspace], specifier)
       if (match) {
         let [key, value] = match
-        if (key !== specifier) value += specifier.slice(key.length)
+        const originalValue = value
+        if (key !== specifier) {
+          value += specifier.slice(key.length)
+        }
         if (value in workspaces) return workspaces[value]
         if (value.startsWith('../') || value.startsWith('./')) {
           return toFileUrl(resolve(workspace, value)).href
         }
         if (!value.startsWith('file://')) {
-          remoteImports.set(specifier, value)
+          if (key !== specifier) remoteImports.set(key, originalValue)
+          else remoteImports.set(specifier, value)
           return specifier
         }
         return value
       }
     }
 
-    const match = globalImporst.find(importMatch, specifier)
+    const match = findMatch(globalImporst, specifier)
     if (match) {
       let [key, value] = match
-      if (key !== specifier) value += specifier.slice(key.length)
+      if (key !== specifier) {
+        console.log({ key, specifier })
+        value += specifier.slice(key.length)
+      }
       if (!value.startsWith('file://')) {
         remoteImports.set(specifier, value)
         return specifier
