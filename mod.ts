@@ -47,16 +47,16 @@ const prepareWorkspace = async (workspace: string) => {
 
   const editedFiles = Promise.all(imports.entries().map(([file, deps]) => applyReplacements(file, toOutput('full', file), deps)))
 
-  config.imports = Object.fromEntries(remoteImports)
-  delete config.workspace
+  const newConfig = { ...config, imports: Object.fromEntries(remoteImports) }
+  delete newConfig.workspace
   const copiedConfig = (async () => {
     const output = toOutput('deno.json')
     await ensureDir(dirname(output))
-    await Deno.writeTextFile(output, JSON.stringify(config, null, 2))
+    await Deno.writeTextFile(output, JSON.stringify(newConfig, null, 2))
   })()
 
   await Promise.all([copiedFiles, editedFiles, copiedConfig])
-} 
+}
 
 await Promise.all(Deno.args.map(prepareWorkspace))
 console.log(`%c🎉 Successfully pruned: %c${Deno.args.join(' ')}`, 'color:green', 'color:yellow')
